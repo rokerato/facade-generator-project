@@ -36,8 +36,12 @@ if not REPLICATE_API_TOKEN:
 genai.configure(api_key=GEMINI_API_KEY)
 os.environ["REPLICATE_API_TOKEN"] = REPLICATE_API_TOKEN
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='.', static_url_path='')
 CORS(app)
+
+@app.route('/')
+def index():
+    return app.send_static_file('index.html')
 
 def sanitize_prompt(prompt: str) -> str:
     """
