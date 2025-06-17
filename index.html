@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Architectural Façade Pattern Generator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <h1>Architectural Façade Pattern Generator</h1>
+        
+        <div class="main-container">
+            <div class="left-column">
+                <form id="pattern-form">
+                    <!-- 1. Building Program & Dimensions -->
+                    <details class="form-accordion" open>
+                        <summary class="form-accordion-header">Building Program & Dimensions</summary>
+                        <div class="form-accordion-content">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="facade-length">Facade Length (meters):</label>
+                                    <input type="number" id="facade-length" name="facadeLength" min="5" max="200" step="0.5" value="20" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="floor-height">Floor-to-Floor Height (meters):</label>
+                                    <input type="number" id="floor-height" name="floorHeight" min="2.5" max="6" step="0.1" value="3.5" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="num-floors">Number of Floors:</label>
+                                    <input type="number" id="num-floors" name="numFloors" min="1" max="100" value="5" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="building-program">Building Program:</label>
+                                    <select id="building-program" name="buildingProgram" required>
+                                        <option value="office">Office</option>
+                                        <option value="housing" selected>Housing</option>
+                                        <option value="mixed-use">Mixed-Use</option>
+                                        <option value="educational">Educational</option>
+                                        <option value="healthcare">Healthcare</option>
+                                        <option value="cultural">Cultural</option>
+                                        <option value="retail">Retail</option>
+                                        <option value="library">Library</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+                    
+                    <!-- 2. Environmental & Performance Targets -->
+                    <details class="form-accordion">
+                        <summary class="form-accordion-header">Environmental & Performance Targets</summary>
+                        <div class="form-accordion-content">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="climate-type">Climate Type:</label>
+                                    <select id="climate-type" name="climateType" required>
+                                        <option value="temperate" selected>Temperate</option>
+                                        <option value="hot-arid">Hot & Arid</option>
+                                        <option value="hot-humid">Hot & Humid</option>
+                                        <option value="cold">Cold</option>
+                                        <option value="continental">Continental</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="window-ratio">Window-to-Wall Ratio: <span id="ratio-value">40%</span></label>
+                                    <input type="range" id="window-ratio" name="windowRatio" min="10" max="90" value="40" class="slider">
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+                    
+                    <!-- 3. Stylistic Intent -->
+                    <details class="form-accordion">
+                        <summary class="form-accordion-header">Stylistic Intent</summary>
+                        <div class="form-accordion-content">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="primary-rhythm">Primary Rhythm:</label>
+                                    <select id="primary-rhythm" name="primaryRhythm" required>
+                                        <option value="vertical" selected>Vertical Emphasis</option>
+                                        <option value="horizontal">Horizontal Emphasis</option>
+                                        <option value="grid">Uniform Grid</option>
+                                        <option value="modular">Modular</option>
+                                        <option value="free-form">Free Form</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group full-width">
+                                    <label for="primary-materials">Primary Materials:</label>
+                                    <input type="text" id="primary-materials" name="primaryMaterials" value="Glass and Aluminum" required>
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+                    
+                    <!-- 4. Massing Image Upload -->
+                    <details class="form-accordion">
+                        <summary class="form-accordion-header">Building Massing Image (Required)</summary>
+                        <div class="form-accordion-content">
+                            <div class="form-group file-upload">
+                                <label for="massing-image">Upload Building Massing Image: <span style="color: red;">*</span></label>
+                                <input type="file" id="massing-image" name="massingImage" accept="image/*" required>
+                                <p class="file-upload-hint">Upload a screenshot or image of your building massing for reference</p>
+                            </div>
+                        </div>
+                    </details>
+                    
+                    <!-- Submit Button Container -->
+                    <div class="submit-button-container">
+                        <button type="submit" form="pattern-form" class="submit-button">
+                            <span class="button-text">Generate Façade Design</span>
+                            <span class="button-icon">🏗️</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="right-column">
+                <!-- Loading State -->
+                <div id="loading-container" class="loading-container" style="display: none;">
+                    <div class="loading-spinner"></div>
+                    <h3>Generating Your Façade Design...</h3>
+                    <p>This may take a moment. Please wait while we create your architectural design.</p>
+                </div>
+                
+                <!-- Error State -->
+                <div id="error-container" class="error-container" style="display: none;">
+                    <div class="error-message">
+                        <h3>Generation Failed</h3>
+                        <p id="error-text">An error occurred while generating the design. Please try again.</p>
+                    </div>
+                </div>
+                
+                <!-- Results Container (Initially Empty) -->
+                <div id="results-container" class="results-container" style="display: none;">
+                    <h2 class="results-title">Design Results</h2>
+                    
+                    <!-- Image Container -->
+                    <div class="image-container">
+                        <img id="generated-image" class="generated-image" src="" alt="Generated façade design">
+                    </div>
+                    
+                    <!-- Dashboard Container -->
+                    <div class="dashboard-container">
+                        <h3 class="dashboard-title">Performance Metrics</h3>
+                        <div id="metrics-container" class="metrics-grid">
+                            <!-- Metrics will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Welcome Message (Initially Visible) -->
+                <div id="welcome-container" class="welcome-container">
+                    <div class="welcome-content">
+                        <h2>Welcome to the Façade Generator</h2>
+                        <p>Fill out the form on the left to generate your architectural façade design. Our AI will analyze your requirements and create a custom façade with performance metrics and visualization.</p>
+                        <div class="welcome-features">
+                            <div class="feature-item">
+                                <span class="feature-icon">🏗️</span>
+                                <span>AI-Powered Design Generation</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-icon">📊</span>
+                                <span>Performance Analysis</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-icon">🎨</span>
+                                <span>Visual Facade Rendering</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js" defer></script>
+</body>
+</html>
